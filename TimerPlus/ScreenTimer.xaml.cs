@@ -124,7 +124,7 @@ namespace TimerPlus
             lblSessionName.Text = sType.Name;
         }
 
-        private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+        public void PlayPause()
         {
             Session s = SavedState.Data.CurrentSession;
             DateTime now = DateTime.Now;
@@ -146,6 +146,11 @@ namespace TimerPlus
                 UpdateControls();
                 SavedState.Save();
             }
+        }
+
+        private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+        {
+            PlayPause();
         }
 
         private void btnSaveSession_Click(object sender, RoutedEventArgs e)
@@ -175,6 +180,12 @@ namespace TimerPlus
                 SavedState.Save();
                 SessionEnd?.Invoke(this, s);
             }
+        }
+
+        private void screen_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+                PlayPause();
         }
     }
 }

@@ -96,58 +96,50 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <materialDesign:TransitioningContent
+                                <StackPanel
                                     Visibility="{Binding FilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                     HorizontalAlignment="Stretch"
-                                    OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                                    <materialDesign:TransitioningContent.OpeningEffects>
-                                        <materialDesign:TransitionEffect
-                                            Kind="ExpandIn" />
-                                    </materialDesign:TransitioningContent.OpeningEffects>
-                                    <StackPanel
-                                        Orientation="Vertical"
+                                    Orientation="Vertical">
+                                    <Grid
                                         HorizontalAlignment="Stretch">
-                                        <Grid
-                                            HorizontalAlignment="Stretch">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition
-                                                    Width="*" />
-                                                <ColumnDefinition
-                                                    Width="Auto" />
-                                                <ColumnDefinition
-                                                    Width="Auto" />
-                                                <ColumnDefinition
-                                                    Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Margin="10"
-                                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
-                                                Text="{Binding Name}">
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                VerticalAlignment="Center"
-                                                Margin="0 0 5 0"
-                                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
-                                                Text="{Binding Count}">
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="2"
-                                                VerticalAlignment="Center"
-                                                Style="{DynamicResource MaterialDesignCaptionTextBlock}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                            Text="{Binding Name}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Margin="0 0 5 0"
+                                            Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                            Text="{Binding Count}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Style="{DynamicResource MaterialDesignCaptionTextBlock}">
                                                 times on record
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="3"
-                                                VerticalAlignment="Center"
-                                                Margin="10"
-                                                Style="{DynamicResource MaterialDesignBody1TextBlock}"
-                                                Text="{Binding Time}">
-                                            </TextBlock>
-                                        </Grid>
-                                    </StackPanel>
-                                </materialDesign:TransitioningContent>
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="3"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                            Text="{Binding Time}">
+                                        </TextBlock>
+                                    </Grid>
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>

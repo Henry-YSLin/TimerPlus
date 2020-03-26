@@ -1,0 +1,157 @@
+﻿<Window
+    x:Class="TimerPlus.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:TimerPlus"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    local:WindowBlur.IsEnabled="True"
+    mc:Ignorable="d"
+    Name="mainWindow"
+    Title="Timer Plus"
+    Height="450"
+    Width="800"
+    WindowStyle="None"
+    WindowStartupLocation="CenterScreen"
+    AllowsTransparency="True"
+    ResizeMode="CanResize"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Closing="Window_Closing"
+    Activated="Window_Activated"
+    Deactivated="Window_Deactivated"
+    SourceInitialized="Window_SourceInitialized"
+    Loaded="mainWindow_Loaded">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            GlassFrameThickness="0"
+            CornerRadius="0"
+            CaptionHeight="0"
+            UseAeroCaptionButtons="False"
+            ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+    <Window.Background>
+        <SolidColorBrush
+            Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}"
+            Opacity="0.7" />
+    </Window.Background>
+    <Grid
+        Name="root">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone
+            Mode="PrimaryMid"
+            Name="windowChrome"
+            HorizontalAlignment="Stretch"
+            Background="Transparent">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <materialDesign:ColorZone
+                    Mode="PrimaryMid"
+                    Name="windowGrip"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="Transparent"
+                    PreviewMouseLeftButtonDown="windowChrome_PreviewMouseLeftButtonDown"
+                    PreviewMouseLeftButtonUp="windowChrome_PreviewMouseLeftButtonUp"
+                    PreviewMouseMove="windowChrome_PreviewMouseMove">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="16 0 0 0">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Margin="0 0 8 0"
+                            Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                            Text="{Binding ElementName=mainWindow, Path=Title}">
+                        </TextBlock>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+
+                    <Button
+                        Name="MinimizeButton"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        KeyboardNavigation.IsTabStop="False"
+                        Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Click="MinimizeButton_Click"
+                        materialDesign:ButtonAssist.CornerRadius="0">
+                        <materialDesign:PackIcon
+                            Kind="WindowMinimize"
+                            Width="15"
+                            Height="15" />
+                    </Button>
+
+                    <Button
+                        Name="MaximizeButton"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        KeyboardNavigation.IsTabStop="False"
+                        Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Click="MaximizeButton_Click"
+                        materialDesign:ButtonAssist.CornerRadius="0">
+                        <materialDesign:PackIcon
+                            Kind="WindowMaximize"
+                            Width="15"
+                            Height="15" />
+                    </Button>
+
+                    <Button
+                        Name="CloseButton"
+                        KeyboardNavigation.IsTabStop="False"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Click="CloseButton_Click"
+                        materialDesign:ButtonAssist.CornerRadius="0">
+                        <materialDesign:PackIcon
+                            Kind="WindowClose"
+                            Width="15"
+                            Height="15" />
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+        <Grid
+            Grid.Row="1">
+            <materialDesign:Transitioner
+                Name="transitioner"
+                SelectedIndex="0">
+                <materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide.ForwardWipe>
+                        <materialDesign:FadeWipe />
+                    </materialDesign:TransitionerSlide.ForwardWipe>
+                    <local:ScreenSessions
+                        x:Name="screenSessions"
+                        SessionStart="screenSessions_SessionStart"/>
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide.ForwardWipe>
+                        <materialDesign:CircleWipe />
+                    </materialDesign:TransitionerSlide.ForwardWipe>
+                    <local:ScreenTimer
+                        x:Name="screenTimer"
+                        SessionEnd="screenTimer_SessionEnd"/>
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+        </Grid>
+    </Grid>
+</Window>

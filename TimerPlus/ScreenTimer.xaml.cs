@@ -121,6 +121,8 @@ namespace TimerPlus
                 lblTimerMinute.Opacity = 1;
                 lblTimerSecond.Opacity = 1;
             }
+            lblColon1.Opacity = lblTimerHour.Opacity;
+            lblColon2.Opacity = lblTimerMinute.Opacity;
             lblSessionName.Text = sType.Name;
         }
 

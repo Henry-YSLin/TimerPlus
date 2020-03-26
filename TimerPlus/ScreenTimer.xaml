@@ -108,6 +108,7 @@
                                 00
                                 </TextBlock>
                                 <TextBlock
+                                    Name="lblColon1"
                                     Style="{DynamicResource TimerTextBlock}">
                                 :
                                 </TextBlock>
@@ -117,6 +118,7 @@
                                 00
                                 </TextBlock>
                                 <TextBlock
+                                    Name="lblColon2"
                                     Style="{DynamicResource TimerTextBlock}">
                                 :
                                 </TextBlock>

@@ -24,11 +24,11 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore TimerPlus.sln
  
-    - name: Build and Publish Web App
+    - name: Build App
       run: msbuild TimerPlus.sln /p:Configuration=Release
  
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: compiled_binary
-        path: bin\Release
+        path: TimerPlus\bin\Release

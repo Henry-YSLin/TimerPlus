@@ -53,6 +53,9 @@
     <Reference Include="MaterialDesignColors, Version=1.2.2.920, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialDesignExtensions, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignExtensions.3.0.0\lib\net45\MaterialDesignExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.0.1.920, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.0.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
@@ -88,6 +91,9 @@
     <Compile Include="ScreenSessions.xaml.cs">
       <DependentUpon>ScreenSessions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScreenStatistics.xaml.cs">
+      <DependentUpon>ScreenStatistics.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScreenTimer.xaml.cs">
       <DependentUpon>ScreenTimer.xaml</DependentUpon>
     </Compile>
@@ -106,6 +112,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ScreenSessions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScreenStatistics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -57,6 +57,17 @@ namespace TimerPlus
             switchToTimer();
         }
 
+        private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (SavedState.Data.CurrentSession != null)
+            {
+                if (!SavedState.Data.CurrentSession.Paused)
+                {
+                    screenTimer.PlayPause();
+                }
+            }
+        }
+
         #region Custom Window
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -88,10 +99,6 @@ namespace TimerPlus
         //        this.BorderThickness = new Thickness(0);
         //    }
         //}
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-        }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {

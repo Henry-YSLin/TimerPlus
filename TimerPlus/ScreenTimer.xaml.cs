@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace TimerPlus
         public event SessionEndHandler SessionEnd;
 
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
-
+        Stopwatch stopwatch = new Stopwatch();
 
         public ScreenTimer()
         {
@@ -59,7 +60,7 @@ namespace TimerPlus
             {
                 iconPlayPause.Kind = PackIconKind.Pause;
                 iconPlayPause.Margin = new Thickness(0);
-                timeRemaining = sType.Time - s.TimeElapsed - (DateTime.Now - s.PauseTime);
+                timeRemaining = sType.Time - s.TimeElapsed - stopwatch.Elapsed;
             }
             if (timeRemaining.TotalSeconds < -5)
             {
@@ -136,15 +137,19 @@ namespace TimerPlus
                 {
                     s.StartTime = now;
                 }
-                s.PauseTime = now;
                 s.Paused = false;
                 dispatcherTimer.Start();
+                stopwatch.Reset();
+                s.PauseTime = now;
+                stopwatch.Start();
             }
             else
             {
+                stopwatch.Stop();
                 dispatcherTimer.Stop();
                 s.Paused = true;
-                s.TimeElapsed += now - s.PauseTime;
+                s.TimeElapsed += stopwatch.Elapsed;
+                s.PauseTime = now;
                 UpdateControls();
                 SavedState.Save();
             }
@@ -161,9 +166,7 @@ namespace TimerPlus
             DateTime now = DateTime.Now;
             if (!s.Paused)
             {
-                s.Paused = true;
-                s.TimeElapsed += now - s.PauseTime;
-                SavedState.Save();
+                PlayPause();
             }
             s.EndTime = s.PauseTime;
             SavedState.Data.SessionRecords.Add(s);

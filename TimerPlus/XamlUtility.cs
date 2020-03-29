@@ -9,6 +9,7 @@ using System.Windows.Interop;
 using TimerPlus.Native;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace TimerPlus
 {
@@ -24,6 +25,61 @@ namespace TimerPlus
             else
             {
                 return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TimeSpanToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeSpan param = (TimeSpan)value;
+            if (param.TotalSeconds > 0)
+            {
+                return param.ToString(@"\+hh\:mm\:ss");
+            }
+            else if (param.TotalSeconds < 0)
+            {
+                return param.ToString(@"\-hh\:mm\:ss");
+            }
+            else
+            {
+                return param.ToString(@"hh\:mm\:ss");
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TimeSpanToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeSpan param = (TimeSpan)value;
+
+            if (param.TotalSeconds <= 0)
+            {
+                return (SolidColorBrush)Application.Current.TryFindResource("SecondaryAccentBrush");
+            }
+            else if (param.TotalMinutes <= 5)
+            {
+                return (SolidColorBrush)Application.Current.TryFindResource("PrimaryHueDarkBrush");
+            }
+            else if (param.TotalMinutes <= 15)
+            {
+                return (SolidColorBrush)Application.Current.TryFindResource("PrimaryHueLightBrush");
+            }
+            else
+            {
+                return (SolidColorBrush)Application.Current.TryFindResource("MaterialDesignBody");
             }
         }
 

@@ -43,9 +43,26 @@ namespace TimerPlus
             }
         }
 
+        [XmlIgnore]
+        public TimeSpan AverageTimeDiff
+        {
+            get
+            {
+                if (SavedState.Data.SessionRecords.Where(x => x.TypeId == id).Count() > 0)
+                {
+                    return TimeSpan.FromSeconds(SavedState.Data.SessionRecords.Where(x => x.TypeId == id).Average(x => Time.TotalSeconds - x.TimeElapsed.TotalSeconds));
+                }
+                else
+                {
+                    return TimeSpan.FromSeconds(0);
+                }
+            }
+        }
+
         public void NotifyCountChanged()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AverageTimeDiff)));
         }
 
         public SessionType() { }

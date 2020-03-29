@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:TimerPlus"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
     TextElement.FontSize="13"
@@ -22,11 +23,11 @@
     AllowsTransparency="True"
     ResizeMode="CanResize"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    Closing="Window_Closing"
     Activated="Window_Activated"
     Deactivated="Window_Deactivated"
     SourceInitialized="Window_SourceInitialized"
-    Loaded="mainWindow_Loaded">
+    Loaded="mainWindow_Loaded"
+    Closing="mainWindow_Closing">
     <WindowChrome.WindowChrome>
         <WindowChrome
             GlassFrameThickness="0"
@@ -139,9 +140,24 @@
                     <materialDesign:TransitionerSlide.ForwardWipe>
                         <materialDesign:FadeWipe />
                     </materialDesign:TransitionerSlide.ForwardWipe>
-                    <local:ScreenSessions
-                        x:Name="screenSessions"
-                        SessionStart="screenSessions_SessionStart"/>
+                    <TabControl
+                        Style="{DynamicResource MaterialDesignTabControl}"
+                        mde:TabControlAssist.TabHeaderForeground="{DynamicResource SecondaryAccentBrush}"
+                        mde:TabControlAssist.TabHeaderHighlightBrush="{DynamicResource SecondaryAccentBrush}"
+                        mde:TabControlAssist.TabHeaderInactiveBrush="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                        mde:TabControlAssist.TabHeaderHorizontalAlignment="Center">
+                        <TabItem
+                            Header="Timer">
+                            <local:ScreenSessions
+                                x:Name="screenSessions"
+                                SessionStart="screenSessions_SessionStart" />
+                        </TabItem>
+                        <TabItem
+                            Header="Statistics">
+                            <local:ScreenStatistics
+                                x:Name="screenStatistics" />
+                        </TabItem>
+                    </TabControl>
                 </materialDesign:TransitionerSlide>
                 <materialDesign:TransitionerSlide>
                     <materialDesign:TransitionerSlide.ForwardWipe>
@@ -149,7 +165,7 @@
                     </materialDesign:TransitionerSlide.ForwardWipe>
                     <local:ScreenTimer
                         x:Name="screenTimer"
-                        SessionEnd="screenTimer_SessionEnd"/>
+                        SessionEnd="screenTimer_SessionEnd" />
                 </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>

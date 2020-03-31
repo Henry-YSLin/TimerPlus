@@ -55,12 +55,14 @@ namespace TimerPlus
                 iconPlayPause.Kind = PackIconKind.PlayOutline;
                 iconPlayPause.Margin = new Thickness(5, 0, 0, 0);
                 timeRemaining = sType.Time - s.TimeElapsed;
+                btnPlayPause.ToolTip = "Start";
             }
             else
             {
                 iconPlayPause.Kind = PackIconKind.Pause;
                 iconPlayPause.Margin = new Thickness(0);
                 timeRemaining = sType.Time - s.TimeElapsed - stopwatch.Elapsed;
+                btnPlayPause.ToolTip = "Pause";
             }
             if (timeRemaining.TotalSeconds < -5)
             {
@@ -185,12 +187,6 @@ namespace TimerPlus
                 SavedState.Save();
                 SessionEnd?.Invoke(this, s);
             }
-        }
-
-        private void screen_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space || e.Key == Key.Enter)
-                PlayPause();
         }
     }
 }

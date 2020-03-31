@@ -27,7 +27,8 @@
     Deactivated="Window_Deactivated"
     SourceInitialized="Window_SourceInitialized"
     Loaded="mainWindow_Loaded"
-    Closing="mainWindow_Closing">
+    Closing="mainWindow_Closing"
+    PreviewKeyDown="mainWindow_PreviewKeyDown">
     <WindowChrome.WindowChrome>
         <WindowChrome
             GlassFrameThickness="0"

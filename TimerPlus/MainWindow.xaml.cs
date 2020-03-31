@@ -68,6 +68,16 @@ namespace TimerPlus
             }
         }
 
+        private void mainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (SavedState.Data.CurrentSession != null)
+                if (e.Key == Key.Space || e.Key == Key.Enter)
+                {
+                    screenTimer.PlayPause();
+                    e.Handled = true;
+                }
+        }
+
         #region Custom Window
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)

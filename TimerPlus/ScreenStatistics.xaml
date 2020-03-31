@@ -164,6 +164,61 @@
                             </Button>
                         </Grid>
 
+                        <Grid
+                            Margin="10 0 10 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="0"
+                                Margin="10 0 0 0"
+                                Text="Sun" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="1"
+                                Margin="10 0 0 0"
+                                Text="Mon" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="2"
+                                Margin="10 0 0 0"
+                                Text="Tue" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="3"
+                                Margin="10 0 0 0"
+                                Text="Wed" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="4"
+                                Margin="10 0 0 0"
+                                Text="Thu" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="5"
+                                Margin="10 0 0 0"
+                                Text="Fri" />
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                Grid.Column="6"
+                                Margin="10 0 0 0"
+                                Text="Sat" />
+                        </Grid>
+
                         <ItemsControl
                             Margin="10"
                             Grid.IsSharedSizeScope="true"

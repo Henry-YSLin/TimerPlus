@@ -34,11 +34,31 @@ namespace TimerPlus
         }
     }
 
+    public class DateTimeToMonthStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime param = (DateTime)value;
+            return param.ToString("MMMM yyyy");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class TimeSpanToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TimeSpan param = (TimeSpan)value;
+            bool showDiff;
+            bool validParam = bool.TryParse(System.Convert.ToString(parameter), out showDiff);
+            if (!validParam || !showDiff)
+            {
+                return param.ToString(@"hh\:mm\:ss");
+            }
             if (param.TotalSeconds > 0)
             {
                 return param.ToString(@"\+hh\:mm\:ss");
@@ -50,6 +70,40 @@ namespace TimerPlus
             else
             {
                 return param.ToString(@"hh\:mm\:ss");
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TimeSpanToColorZoneModeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeSpan param = (TimeSpan)value;
+
+            if (param.TotalHours <= 0)
+            {
+                return MaterialDesignThemes.Wpf.ColorZoneMode.Standard;
+            }
+            else if (param.TotalHours <= 3)
+            {
+                return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+            }
+            else if (param.TotalHours <= 5)
+            {
+                return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryMid;
+            }
+            else if (param.TotalHours <= 7)
+            {
+                return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
+            }
+            else
+            {
+                return MaterialDesignThemes.Wpf.ColorZoneMode.Accent;
             }
         }
 

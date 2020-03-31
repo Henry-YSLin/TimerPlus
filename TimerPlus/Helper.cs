@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,6 +43,34 @@ namespace TimerPlus
             return string.IsNullOrWhiteSpace(str);
         }
 
+        public static int RemoveAll<T>(
+        this ObservableCollection<T> coll, Func<T, bool> condition)
+        {
+            var itemsToRemove = coll.Where(condition).ToList();
+
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                coll.Remove(itemToRemove);
+            }
+
+            return itemsToRemove.Count;
+        }
+
+        public static IEnumerable<DateTime> AllDatesInMonth(DateTime month)
+        {
+            int days = DateTime.DaysInMonth(month.Year, month.Month);
+            for (int day = 1; day <= days; day++)
+            {
+                yield return new DateTime(month.Year, month.Month, day);
+            }
+        }
+
+        public static IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
+
         public static void HideBoundingBox(object root)
         {
             Control control = root as Control;
@@ -54,6 +84,28 @@ namespace TimerPlus
                     HideBoundingBox(child);
                 }
             }
+        }
+
+        static GregorianCalendar _gc = new GregorianCalendar();
+        public static int GetWeekOfMonth(this DateTime time)
+        {
+            DateTime first = new DateTime(time.Year, time.Month, 1);
+            return time.GetWeekOfYear() - first.GetWeekOfYear() + 1;
+        }
+
+        public static int GetWeekOfYear(this DateTime time)
+        {
+            return _gc.GetWeekOfYear(time, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+        }
+
+        public static DateTime FirstDayOfMonth(this DateTime value)
+        {
+            return value.Date.AddDays(1 - value.Day);
+        }
+
+        public static DateTime LastDayOfMonth(this DateTime value)
+        {
+            return value.FirstDayOfMonth().AddMonths(1).AddDays(-1);
         }
     }
 }

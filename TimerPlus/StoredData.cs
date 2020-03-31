@@ -32,7 +32,7 @@ namespace TimerPlus
         public TimeSpan Time { get => time; set { time = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Time))); } }
 
         [XmlIgnore]
-        public bool FilterVisible { get => filterVisible; set { filterVisible = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterVisible))); } } 
+        public bool FilterVisible { get => filterVisible; set { filterVisible = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterVisible))); } }
 
         [XmlIgnore]
         public int Count
@@ -99,18 +99,182 @@ namespace TimerPlus
         public DateTime EndTime { get; set; } = DateTime.MinValue;
     }
 
-    [Serializable]
-    public class StoredData
+    public class DaySummary : INotifyPropertyChanged
     {
+        private DateTime date;
+
+        public DateTime Date
+        {
+            get => date; set
+            {
+                date = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GridRow)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GridColumn)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInThePast)));
+            }
+        }
+
+        public ObservableCollection<Session> Records { get; } = new ObservableCollection<Session>();
+
+        public string SessionTypeListString
+        {
+            get
+            {
+                if (Records.Count == 0)
+                    return "";
+                else
+                    return Records.GroupBy(x => x.TypeId)
+                        .Select(g => SavedState.Data.SessionTypes.First(x => x.Id == g.Key).Name + (g.Count() > 1 ? " ×" + g.Count().ToString() : ""))
+                        .Aggregate((x1, x2) => x1 + "\r\n" + x2);
+            }
+        }
+
+        public TimeSpan TotalDuration
+        {
+            get
+            {
+                if (Records.Count == 0)
+                    return TimeSpan.Zero;
+                else
+                    return Records.Select(x => SavedState.Data.SessionTypes.First(y => y.Id == x.TypeId).Time).Aggregate((x1, x2) => x1 + x2);
+            }
+        }
+
+        public TimeSpan TotalNetDuration
+        {
+            get
+            {
+                if (Records.Count == 0)
+                    return TimeSpan.Zero;
+                else
+                    return Records.Select(x => x.TimeElapsed).Aggregate((x1, x2) => x1 + x2);
+            }
+        }
+
+        public int GridRow
+        {
+            get
+            {
+                return Helper.GetWeekOfMonth(date) - 1;
+            }
+        }
+
+        public int GridColumn
+        {
+            get
+            {
+                return (int)date.DayOfWeek;
+            }
+        }
+
+        public bool IsVisible
+        {
+            get
+            {
+                return Date.FirstDayOfMonth() == SavedState.Data.CurrentMonth;
+            }
+        }
+
+        public bool IsInThePast
+        {
+            get
+            {
+                return Date <= DateTime.Now;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public DaySummary()
+        {
+            Records.CollectionChanged += Records_CollectionChanged;
+        }
+
+        public void NotifyVisibilityChanged()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsVisible)));
+        }
+
+        private void Records_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SessionTypeListString)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalDuration)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalNetDuration)));
+        }
+    }
+
+    [Serializable]
+    public class StoredData : INotifyPropertyChanged
+    {
+        private DateTime currentMonth = DateTime.Today.FirstDayOfMonth();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<SessionType> SessionTypes { get; set; } = new ObservableCollection<SessionType>();
 
         public ObservableCollection<Session> SessionRecords { get; set; } = new ObservableCollection<Session>();
 
         public Session CurrentSession { get; set; } = null;
 
+        [XmlIgnore]
+        public ObservableCollection<DaySummary> DaySummaries { get; } = new ObservableCollection<DaySummary>();
+
+        [XmlIgnore]
+        public DateTime CurrentMonth
+        {
+            get => currentMonth; set
+            {
+                currentMonth = value;
+                UpdateCurrentMonth();
+            }
+        }
+
+        [XmlIgnore]
+        public bool HasNextMonth
+        {
+            get
+            {
+                List<DateTime> months = SessionRecords.Select(x => x.EndTime.FirstDayOfMonth()).Distinct().ToList();
+                return CurrentMonth != months.Max();
+            }
+        }
+
+        [XmlIgnore]
+        public bool HasPrevMonth
+        {
+            get
+            {
+                List<DateTime> months = SessionRecords.Select(x => x.EndTime.FirstDayOfMonth()).Distinct().ToList();
+                return CurrentMonth != months.Min();
+            }
+        }
+
         public StoredData()
         {
             SessionRecords.CollectionChanged += SessionRecords_CollectionChanged;
+        }
+
+        private void UpdateCurrentMonth()
+        {
+            DaySummaries.Clear();
+            foreach (DateTime day in Helper.EachDay(DateTime.Today.FirstDayOfMonth(), DateTime.Today.LastDayOfMonth()))
+            {
+                DaySummary summary = new DaySummary();
+                summary.Date = day;
+                foreach (Session s in SessionRecords.Where(x => x.EndTime.Date == day))
+                {
+                    summary.Records.Add(s);
+                }
+                DaySummaries.Add(summary);
+            }
+
+            foreach (DaySummary summary in DaySummaries)
+            {
+                summary.NotifyVisibilityChanged();
+            }
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(HasPrevMonth)));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(HasNextMonth)));
         }
 
         private void SessionRecords_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -118,6 +282,90 @@ namespace TimerPlus
             foreach (SessionType type in SessionTypes)
             {
                 type.NotifyCountChanged();
+            }
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (Session s in e.NewItems)
+                {
+                    if (s.EndTime >= DateTime.Today.FirstDayOfMonth() && s.EndTime < DateTime.Now)
+                    {
+                        DaySummary summary = DaySummaries.FirstOrDefault(x => x.Date == s.EndTime.Date);
+                        if (summary == null)
+                        {
+                            summary = new DaySummary();
+                            summary.Date = s.EndTime.Date;
+                            summary.Records.Add(s);
+                            DaySummaries.Add(summary);
+                        }
+                        else
+                        {
+                            summary.Records.Add(s);
+                        }
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Session s in e.OldItems)
+                {
+                    DaySummary summary = DaySummaries.FirstOrDefault(x => x.Date == s.EndTime.Date);
+                    if (summary != null)
+                    {
+                        summary.Records.Remove(s);
+                        if (summary.Records.Count == 0)
+                        {
+                            DaySummaries.Remove(summary);
+                        }
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                foreach (Session s in e.OldItems)
+                {
+                    DaySummary summary = DaySummaries.FirstOrDefault(x => x.Date == s.EndTime.Date);
+                    if (summary != null)
+                    {
+                        summary.Records.Remove(s);
+                        if (summary.Records.Count == 0)
+                        {
+                            DaySummaries.Remove(summary);
+                        }
+                    }
+                }
+                foreach (Session s in e.NewItems)
+                {
+                    if (s.EndTime >= DateTime.Today.FirstDayOfMonth() && s.EndTime < DateTime.Now)
+                    {
+                        DaySummary summary = DaySummaries.FirstOrDefault(x => x.Date == s.EndTime.Date);
+                        if (summary == null)
+                        {
+                            summary = new DaySummary();
+                            summary.Date = s.EndTime.Date;
+                            summary.Records.Add(s);
+                            DaySummaries.Add(summary);
+                        }
+                        else
+                        {
+                            summary.Records.Add(s);
+                        }
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                DaySummaries.Clear();
+            }
+
+            DaySummaries.RemoveAll(x => x.Date.FirstDayOfMonth() != DateTime.Today.FirstDayOfMonth());
+
+            foreach (DateTime day in Helper.EachDay(DateTime.Today.FirstDayOfMonth(), DateTime.Today.LastDayOfMonth()))
+            {
+                if (!DaySummaries.Select(x => x.Date).Contains(day))
+                {
+                    DaySummaries.Add(new DaySummary() { Date = day });
+                }
             }
         }
     }

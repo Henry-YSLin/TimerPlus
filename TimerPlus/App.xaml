@@ -54,7 +54,7 @@
                     <!-- include your secondary pallette -->
                     <ResourceDictionary.MergedDictionaries>
                         <ResourceDictionary
-                            Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.LightBlue.xaml" />
+                            Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Indigo.xaml" />
                     </ResourceDictionary.MergedDictionaries>
 
                     <!-- include a single secondary accent color (and the associated forecolour) -->

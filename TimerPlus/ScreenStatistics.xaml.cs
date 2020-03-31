@@ -26,8 +26,28 @@ namespace TimerPlus
             InitializeComponent();
             Helper.HideBoundingBox(screen);
             listSessionType.ItemsSource = SavedState.Data.SessionTypes;
+            listDaySummaries.ItemsSource = SavedState.Data.DaySummaries;
+            lblCurrentMonth.DataContext = SavedState.Data;
+            btnPrevMonth.DataContext = SavedState.Data;
+            btnNextMonth.DataContext = SavedState.Data;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void btnPrevMonth_Click(object sender, RoutedEventArgs e)
+        {
+            if (SavedState.Data.HasPrevMonth)
+            {
+                SavedState.Data.CurrentMonth = SavedState.Data.CurrentMonth.AddMonths(-1);
+            } 
+        }
+
+        private void btnNextMonth_Click(object sender, RoutedEventArgs e)
+        {
+            if (SavedState.Data.HasNextMonth)
+            {
+                SavedState.Data.CurrentMonth = SavedState.Data.CurrentMonth.AddMonths(1);
+            }
+        }
     }
 }

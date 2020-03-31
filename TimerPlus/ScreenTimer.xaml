@@ -181,6 +181,7 @@
                         ToolTip="Start/Stop"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                         materialDesign:ButtonProgressAssist.IndicatorBackground="Transparent"
+                        materialDesign:ButtonProgressAssist.IndicatorForeground="{DynamicResource PrimaryHueLightBrush}"
                         materialDesign:ButtonProgressAssist.Minimum="0"
                         materialDesign:ButtonProgressAssist.Maximum="100"
                         materialDesign:ButtonProgressAssist.Value="60"

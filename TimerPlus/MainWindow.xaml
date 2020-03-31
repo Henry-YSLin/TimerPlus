@@ -142,8 +142,8 @@
                     </materialDesign:TransitionerSlide.ForwardWipe>
                     <TabControl
                         Style="{DynamicResource MaterialDesignTabControl}"
-                        mde:TabControlAssist.TabHeaderForeground="{DynamicResource SecondaryAccentBrush}"
-                        mde:TabControlAssist.TabHeaderHighlightBrush="{DynamicResource SecondaryAccentBrush}"
+                        mde:TabControlAssist.TabHeaderForeground="{DynamicResource PrimaryHueLightBrush}"
+                        mde:TabControlAssist.TabHeaderHighlightBrush="{DynamicResource PrimaryHueLightBrush}"
                         mde:TabControlAssist.TabHeaderInactiveBrush="{DynamicResource PrimaryHueDarkForegroundBrush}"
                         mde:TabControlAssist.TabHeaderHorizontalAlignment="Center">
                         <TabItem

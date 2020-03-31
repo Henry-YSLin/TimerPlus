@@ -25,8 +25,12 @@
             x:Key="BoolToVisibilityConverter" />
         <local:TimeSpanToStringConverter
             x:Key="TimeSpanToStringConverter" />
+        <local:TimeSpanToColorZoneModeConverter
+            x:Key="TimeSpanToColorZoneModeConverter" />
         <local:TimeSpanToBrushConverter
             x:Key="TimeSpanToBrushConverter" />
+        <local:DateTimeToMonthStringConverter
+            x:Key="DateTimeToMonthStringConverter" />
     </UserControl.Resources>
     <materialDesign:ColorZone
         Mode="PrimaryDark"
@@ -40,80 +44,242 @@
                 <materialDesign:ColorZone
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    MaxWidth="600"
+                    MaxWidth="700"
                     Margin="32 16 32 32"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     CornerRadius="5">
                     <StackPanel>
+
                         <ItemsControl
+                            Margin="10"
                             Grid.IsSharedSizeScope="true"
                             Name="listSessionType"
                             HorizontalAlignment="Stretch">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel
-                                        Visibility="{Binding FilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                        HorizontalAlignment="Stretch"
-                                        Orientation="Vertical">
-                                        <Grid
-                                            HorizontalAlignment="Stretch">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition
-                                                    Width="*" />
-                                                <ColumnDefinition
-                                                    Width="Auto"
-                                                    SharedSizeGroup="gp1"/>
-                                                <ColumnDefinition
-                                                    Width="Auto"
-                                                    SharedSizeGroup="gp2" />
-                                                <ColumnDefinition
-                                                    Width="Auto"
-                                                    SharedSizeGroup="gp3" />
-                                                <ColumnDefinition
-                                                    Width="Auto"
-                                                    SharedSizeGroup="gp4" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Margin="10"
-                                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
-                                                Text="{Binding Name}">
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                VerticalAlignment="Center"
-                                                Margin="0 0 5 0"
-                                                Style="{DynamicResource MaterialDesignCaptionTextBlock}"
-                                                Text="{Binding Count}">
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="2"
-                                                VerticalAlignment="Center"
-                                                Style="{DynamicResource MaterialDesignCaptionTextBlock}">
+                                    <materialDesign:TransitioningContent
+                                        OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
+                                        <materialDesign:TransitioningContent.OpeningEffects>
+                                            <materialDesign:TransitionEffect
+                                                Kind="FadeIn" />
+                                        </materialDesign:TransitioningContent.OpeningEffects>
+                                        <StackPanel
+                                            HorizontalAlignment="Stretch"
+                                            Orientation="Vertical">
+                                            <Grid
+                                                HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                    <ColumnDefinition
+                                                        Width="Auto"
+                                                        SharedSizeGroup="gp1" />
+                                                    <ColumnDefinition
+                                                        Width="Auto"
+                                                        SharedSizeGroup="gp2" />
+                                                    <ColumnDefinition
+                                                        Width="Auto"
+                                                        SharedSizeGroup="gp3" />
+                                                    <ColumnDefinition
+                                                        Width="Auto"
+                                                        SharedSizeGroup="gp4" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Margin="10"
+                                                    Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                                    Text="{Binding Name}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0 0 5 0"
+                                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                                    Text="{Binding Count}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Column="2"
+                                                    VerticalAlignment="Center"
+                                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}">
                                                 times
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="3"
-                                                VerticalAlignment="Center"
-                                                Margin="10"
-                                                Style="{DynamicResource MaterialDesignBody1TextBlock}"
-                                                Text="{Binding Time}">
-                                            </TextBlock>
-                                            <TextBlock
-                                                Grid.Column="4"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Right"
-                                                Margin="10"
-                                                Style="{DynamicResource MaterialDesignBody1TextBlock}"
-                                                Foreground="{Binding AverageTimeDiff, Converter={StaticResource TimeSpanToBrushConverter}}"
-                                                Text="{Binding AverageTimeDiff, Converter={StaticResource TimeSpanToStringConverter}}">
-                                            </TextBlock>
-                                        </Grid>
-                                    </StackPanel>
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Column="3"
+                                                    VerticalAlignment="Center"
+                                                    Margin="10"
+                                                    Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                                    Text="{Binding Time}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Column="4"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Right"
+                                                    Margin="10"
+                                                    Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                                    Foreground="{Binding AverageTimeDiff, Converter={StaticResource TimeSpanToBrushConverter}}"
+                                                    Text="{Binding AverageTimeDiff, Converter={StaticResource TimeSpanToStringConverter}, ConverterParameter=True}">
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                    </materialDesign:TransitioningContent>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
+                        <Grid
+                            Margin="10 10 10 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Name="lblCurrentMonth"
+                                VerticalAlignment="Center"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding CurrentMonth, Converter={StaticResource DateTimeToMonthStringConverter}}">
+                            </TextBlock>
+                            <Button
+                                Name="btnPrevMonth"
+                                Grid.Column="1"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                ToolTip="Previous Month"
+                                Click="btnPrevMonth_Click"
+                                IsEnabled="{Binding HasPrevMonth}">
+                                <materialDesign:PackIcon
+                                    Kind="ChevronLeft" />
+                            </Button>
+                            <Button
+                                Name="btnNextMonth"
+                                Grid.Column="2"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                ToolTip="Next Month"
+                                Click="btnNextMonth_Click"
+                                IsEnabled="{Binding HasNextMonth}">
+                                <materialDesign:PackIcon
+                                    Kind="ChevronRight" />
+                            </Button>
+                        </Grid>
+
+                        <ItemsControl
+                            Margin="10"
+                            Grid.IsSharedSizeScope="true"
+                            Name="listDaySummaries"
+                            HorizontalAlignment="Stretch">
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter
+                                        Property="Grid.Row"
+                                        Value="{Binding GridRow}" />
+                                    <Setter
+                                        Property="Grid.Column"
+                                        Value="{Binding GridColumn}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="Auto"
+                                                SharedSizeGroup="gp6" />
+                                            <RowDefinition
+                                                Height="Auto"
+                                                SharedSizeGroup="gp6" />
+                                            <RowDefinition
+                                                Height="Auto"
+                                                SharedSizeGroup="gp6" />
+                                            <RowDefinition
+                                                Height="Auto"
+                                                SharedSizeGroup="gp6" />
+                                            <RowDefinition
+                                                Height="Auto"
+                                                SharedSizeGroup="gp6" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <materialDesign:TransitioningContent
+                                        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                        OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
+                                        <materialDesign:TransitioningContent.OpeningEffects>
+                                            <materialDesign:TransitionEffect
+                                                Kind="FadeIn" />
+                                        </materialDesign:TransitioningContent.OpeningEffects>
+                                        <materialDesign:ColorZone
+                                            Mode="{Binding TotalDuration, Converter={StaticResource TimeSpanToColorZoneModeConverter}}"
+                                            CornerRadius="2"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Top"
+                                            Margin="2">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                    <RowDefinition
+                                                        Height="Auto"
+                                                        MinHeight="50"
+                                                        SharedSizeGroup="gp5" />
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock
+                                                    Grid.Row="0"
+                                                    Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                                    Margin="5 5 5 0"
+                                                    Text="{Binding Date.Day}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                                    Margin="5 0 5 5"
+                                                    Text="{Binding SessionTypeListString}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    HorizontalAlignment="Right"
+                                                    Grid.Row="2"
+                                                    Margin="5 0 5 0"
+                                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                                    Text="{Binding TotalDuration, Converter={StaticResource TimeSpanToStringConverter}, ConverterParameter=False}"
+                                                    Visibility="{Binding IsInThePast, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                </TextBlock>
+                                                <TextBlock
+                                                    HorizontalAlignment="Right"
+                                                    Grid.Row="3"
+                                                    Margin="5 0 5 0"
+                                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                                    Text="{Binding TotalNetDuration, Converter={StaticResource TimeSpanToStringConverter}, ConverterParameter=False}"
+                                                    Visibility="{Binding IsInThePast, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                </TextBlock>
+                                            </Grid>
+                                        </materialDesign:ColorZone>
+                                    </materialDesign:TransitioningContent>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </materialDesign:ColorZone>
             </ScrollViewer>

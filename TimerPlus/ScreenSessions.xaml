@@ -33,7 +33,7 @@
             <materialDesign:ColorZone
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                MaxWidth="600"
+                MaxWidth="700"
                 Margin="32 16 32 32"
                 materialDesign:ShadowAssist.ShadowDepth="Depth2"
                 CornerRadius="5">

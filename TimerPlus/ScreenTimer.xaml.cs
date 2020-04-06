@@ -64,7 +64,7 @@ namespace TimerPlus
                 timeRemaining = sType.Time - s.TimeElapsed - stopwatch.Elapsed;
                 btnPlayPause.ToolTip = "Pause";
             }
-            if (timeRemaining.TotalSeconds < -5)
+            if (!sType.CountUp && timeRemaining.TotalSeconds < -5)
             {
                 lblOvertime.Visibility = Visibility.Visible;
             }
@@ -80,7 +80,7 @@ namespace TimerPlus
                 ButtonProgressAssist.SetMaximum(btnPlayPause, sType.Time.TotalSeconds);
                 ButtonProgressAssist.SetValue(btnPlayPause, timeRemaining.TotalSeconds);
             }
-            else if (timeRemaining.TotalSeconds < -5)
+            else if (timeRemaining.TotalSeconds < -5 || sType.CountUp)
             {
                 timeRemaining = -timeRemaining;
                 lblTimerHour.Text = ((int)Math.Floor(timeRemaining.TotalHours)).ToString("00");

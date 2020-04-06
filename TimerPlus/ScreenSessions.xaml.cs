@@ -86,7 +86,7 @@ namespace TimerPlus
                 Keyboard.Focus(txtNewSessionName);
                 return;
             }
-            if (timeNewSession.SelectedTime == null)
+            if (timeNewSession.SelectedTime == null && !checkCountUp.IsChecked.GetValueOrDefault())
             {
                 timeNewSession.Focus();
                 Keyboard.Focus(timeNewSession);
@@ -99,7 +99,14 @@ namespace TimerPlus
                 {
                     id = Helper.RandomString(10);
                 } while (SavedState.Data.SessionTypes.Select(x => x.Id).Contains(id));
-                SavedState.Data.SessionTypes.Add(new SessionType(id, txtNewSessionName.Text, timeNewSession.SelectedTime.Value - DateTime.Today));
+                if (checkCountUp.IsChecked.GetValueOrDefault())
+                {
+                    SavedState.Data.SessionTypes.Add(new SessionType(id, txtNewSessionName.Text, TimeSpan.FromSeconds(0), true));
+                }
+                else
+                {
+                    SavedState.Data.SessionTypes.Add(new SessionType(id, txtNewSessionName.Text, timeNewSession.SelectedTime.Value - DateTime.Today, false));
+                }
                 SavedState.Save();
                 expanderNewSession.IsExpanded = false;
                 snackbar.MessageQueue.Enqueue("New session type created");
@@ -107,8 +114,23 @@ namespace TimerPlus
             else
             {
                 EditSession.Name = txtNewSessionName.Text;
-                EditSession.Time = timeNewSession.SelectedTime.Value - DateTime.Today;
+                EditSession.CountUp = checkCountUp.IsChecked.GetValueOrDefault();
+                if (EditSession.CountUp)
+                {
+                    EditSession.Time = TimeSpan.FromSeconds(0);
+                }
+                else
+                {
+                    EditSession.Time = timeNewSession.SelectedTime.Value - DateTime.Today;
+                }
                 SavedState.Save();
+                foreach (DaySummary daySummary in SavedState.Data.DaySummaries)
+                {
+                    if (daySummary.Records.Select(x => x.TypeId).Contains(EditSession.Id))
+                    {
+                        daySummary.NotifyStatsChanged();
+                    }
+                }
                 expanderNewSession.IsExpanded = false;
                 expanderNewSession.Header = "New Session Type";
                 snackbar.MessageQueue.Enqueue("Session type saved");
@@ -150,6 +172,7 @@ namespace TimerPlus
             expanderNewSession.IsExpanded = true;
             txtNewSessionName.Text = type.Name;
             timeNewSession.SelectedTime = DateTime.Today + type.Time;
+            checkCountUp.IsChecked = type.CountUp;
             NewSessionNameValidationRule.CheckDuplicate = false;
         }
 
@@ -165,6 +188,17 @@ namespace TimerPlus
             SavedState.Data.SessionTypes.Remove(type);
             SavedState.Save();
             snackbar.MessageQueue.Enqueue("Session type deleted");
+        }
+
+        private void checkCountUp_Checked(object sender, RoutedEventArgs e)
+        {
+            timeNewSession.IsEnabled = false;
+            timeNewSession.SelectedTime = null;
+        }
+
+        private void checkCountUp_Unchecked(object sender, RoutedEventArgs e)
+        {
+            timeNewSession.IsEnabled = true;
         }
     }
 

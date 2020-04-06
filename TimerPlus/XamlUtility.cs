@@ -17,7 +17,11 @@ namespace TimerPlus
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool param = (parameter as bool?).GetValueOrDefault();
+            bool param;
+            if (!bool.TryParse(System.Convert.ToString(parameter), out param))
+            {
+                param = false;
+            }
             if ((value as bool?).GetValueOrDefault() != param)
             {
                 return Visibility.Visible;

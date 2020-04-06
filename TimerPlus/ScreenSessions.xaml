@@ -23,6 +23,8 @@
     <UserControl.Resources>
         <local:BoolToVisibilityConverter
             x:Key="BoolToVisibilityConverter" />
+        <local:TimeSpanToStringConverter
+            x:Key="TimeSpanToStringConverter" />
     </UserControl.Resources>
     <materialDesign:ColorZone
         Mode="PrimaryDark"
@@ -107,8 +109,8 @@
                                             <ColumnDefinition
                                                 Width="*" />
                                             <ColumnDefinition
-                                                Width="Auto" 
-                                                SharedSizeGroup="gp1"/>
+                                                Width="Auto"
+                                                SharedSizeGroup="gp1" />
                                             <ColumnDefinition
                                                 Width="Auto"
                                                 SharedSizeGroup="gp2" />
@@ -116,12 +118,20 @@
                                                 Width="Auto"
                                                 SharedSizeGroup="gp3" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            Margin="10"
-                                            Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
-                                            Text="{Binding Name}">
-                                        </TextBlock>
+                                        <StackPanel
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Margin="10"
+                                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                                Text="{Binding Name}">
+                                            </TextBlock>
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Margin="-5 0 10 0"
+                                                Visibility="{Binding CountUp, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                Kind="Stopwatch" />
+                                        </StackPanel>
                                         <TextBlock
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
@@ -140,7 +150,7 @@
                                             VerticalAlignment="Center"
                                             Margin="10"
                                             Style="{DynamicResource MaterialDesignBody1TextBlock}"
-                                            Text="{Binding Time}">
+                                            Text="{Binding StatsTime, Converter={StaticResource TimeSpanToStringConverter}}">
                                         </TextBlock>
                                     </Grid>
                                 </StackPanel>
@@ -168,6 +178,12 @@
                                         <ColumnDefinition
                                             Width="Auto" />
                                     </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+                                            Height="Auto" />
+                                        <RowDefinition
+                                            Height="Auto" />
+                                    </Grid.RowDefinitions>
                                     <TextBox
                                         Name="txtNewSessionName"
                                         Margin="0 0 24 0"
@@ -197,6 +213,24 @@
                                         Name="timeNewSession"
                                         WithSeconds="True"
                                         Width="120" />
+                                    <CheckBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Name="checkCountUp"
+                                        Checked="checkCountUp_Checked"
+                                        Unchecked="checkCountUp_Unchecked">
+                                        <StackPanel
+                                            Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Margin="0 2 5 2"
+                                                Kind="Stopwatch" />
+                                            <TextBlock
+                                                VerticalAlignment="Center">
+                                                Count up
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </CheckBox>
                                 </Grid>
                                 <Button
                                     Name="btnNewSession"

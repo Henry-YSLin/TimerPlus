@@ -93,15 +93,15 @@ namespace TimerPlus
             {
                 return MaterialDesignThemes.Wpf.ColorZoneMode.Standard;
             }
-            else if (param.TotalHours <= 3)
+            else if (param.TotalHours < 2.5)
             {
                 return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
             }
-            else if (param.TotalHours <= 5)
+            else if (param.TotalHours < 3.5)
             {
                 return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryMid;
             }
-            else if (param.TotalHours <= 7)
+            else if (param.TotalHours < 4.5)
             {
                 return MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
             }

@@ -284,7 +284,7 @@
                                 <DataTemplate>
                                     <materialDesign:ColorZone
                                         Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                        Mode="{Binding TotalDuration, Converter={StaticResource TimeSpanToColorZoneModeConverter}}"
+                                        Mode="{Binding TotalNetDuration, Converter={StaticResource TimeSpanToColorZoneModeConverter}}"
                                         CornerRadius="2"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Top"

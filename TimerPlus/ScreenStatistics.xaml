@@ -410,7 +410,6 @@
                                         <TextBlock
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
-                                            Margin="10"
                                             Style="{DynamicResource MaterialDesignCaptionTextBlock}"
                                             Text="—">
                                         </TextBlock>

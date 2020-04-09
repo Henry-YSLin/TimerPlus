@@ -66,7 +66,7 @@ namespace TimerPlus
                     }
                     else
                     {
-                        return TimeSpan.FromSeconds(0);
+                        return TimeSpan.Zero;
                     }
                 }
                 else
@@ -96,7 +96,7 @@ namespace TimerPlus
                 }
                 else
                 {
-                    return TimeSpan.FromSeconds(0);
+                    return TimeSpan.Zero;
                 }
             }
         }
@@ -132,6 +132,52 @@ namespace TimerPlus
 
         [XmlIgnore]
         public bool Paused { get; set; } = true;
+
+        [XmlIgnore]
+        public SessionType Type
+        {
+            get
+            {
+                return SavedState.Data.SessionTypes.FirstOrDefault(x => x.Id == TypeId);
+            }
+        }
+
+        [XmlIgnore]
+        public string TypeName
+        {
+            get
+            {
+                return Type.GetTypeName();
+            }
+        }
+
+        [XmlIgnore]
+        public bool TypeCountUp
+        {
+            get
+            {
+                SessionType sType = Type;
+                if (sType != null) return sType.CountUp;
+                else return true;
+            }
+        }
+
+        [XmlIgnore]
+        public TimeSpan TimeDiff
+        {
+            get
+            {
+                SessionType sType = Type;
+                if (sType != null && !sType.CountUp)
+                {
+                    return sType.Time - TimeElapsed;
+                }
+                else
+                {
+                    return TimeSpan.Zero;
+                }
+            }
+        }
 
         [XmlElement(DataType = "dateTime")]
         public DateTime PauseTime { get; set; } = DateTime.MinValue;
@@ -169,7 +215,7 @@ namespace TimerPlus
                     return "";
                 else
                     return Records.GroupBy(x => x.TypeId)
-                        .Select(g => SavedState.Data.SessionTypes.First(x => x.Id == g.Key).Name + (g.Count() > 1 ? " ×" + g.Count().ToString() : ""))
+                        .Select(g => SavedState.Data.SessionTypes.FirstOrDefault(x => x.Id == g.Key).GetTypeName() + (g.Count() > 1 ? " ×" + g.Count().ToString() : ""))
                         .Aggregate((x1, x2) => x1 + "\r\n" + x2);
             }
         }
@@ -183,8 +229,10 @@ namespace TimerPlus
                 else
                     return Records.Select(x =>
                     {
-                        var sType = SavedState.Data.SessionTypes.First(y => y.Id == x.TypeId);
-                        return sType.CountUp ? x.TimeElapsed : sType.Time;
+                        var sType = SavedState.Data.SessionTypes.FirstOrDefault(y => y.Id == x.TypeId);
+                        if (sType != null)
+                            return sType.CountUp ? x.TimeElapsed : sType.Time;
+                        else return x.TimeElapsed;
                     }).Aggregate((x1, x2) => x1 + x2);
             }
         }

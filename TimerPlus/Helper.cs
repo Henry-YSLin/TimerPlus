@@ -43,6 +43,12 @@ namespace TimerPlus
             return string.IsNullOrWhiteSpace(str);
         }
 
+        public static string GetTypeName(this SessionType sType)
+        {
+            if (sType != null) return sType.Name;
+            else return "Unknown";
+        }
+
         public static int RemoveAll<T>(
         this ObservableCollection<T> coll, Func<T, bool> condition)
         {

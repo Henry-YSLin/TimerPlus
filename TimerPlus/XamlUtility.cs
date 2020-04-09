@@ -133,7 +133,7 @@ namespace TimerPlus
             }
             else if (param.TotalMinutes <= 15)
             {
-                return (SolidColorBrush)Application.Current.TryFindResource("PrimaryHueLightBrush");
+                return (SolidColorBrush)Application.Current.TryFindResource("PrimaryHueMidBrush");
             }
             else
             {

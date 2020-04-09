@@ -50,7 +50,7 @@
                     CornerRadius="5">
                     <StackPanel>
                         <ItemsControl
-                            Margin="10"
+                            Margin="20 10 20 10"
                             Grid.IsSharedSizeScope="true"
                             Name="listSessionType"
                             HorizontalAlignment="Stretch">
@@ -133,8 +133,15 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
+                        <Border
+                            Background="{DynamicResource MaterialDesignDivider}"
+                            Height="1"
+                            Margin="30 0 30 0"
+                            HorizontalAlignment="Stretch"
+                            SnapsToDevicePixels="True" />
+
                         <Grid
-                            Margin="10 10 10 0">
+                            Margin="20 10 20 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
                                     Width="*" />
@@ -335,6 +342,119 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
+                        <Border
+                            Background="{DynamicResource MaterialDesignDivider}"
+                            Height="1"
+                            Margin="30 0 30 0"
+                            HorizontalAlignment="Stretch"
+                            SnapsToDevicePixels="True" />
+
+                        <ListView
+                            Margin="10"
+                            Grid.IsSharedSizeScope="true"
+                            Name="listSessionRecords"
+                            HorizontalAlignment="Stretch"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.ScrollUnit="Pixel"
+                            MaxHeight="600">
+                            <ListView.ItemContainerStyle>
+                                <Style
+                                    TargetType="ListViewItem"
+                                    BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                    <Setter
+                                        Property="FocusVisualStyle"
+                                        Value="{x:Null}" />
+                                    <Setter
+                                        Property="Focusable"
+                                        Value="False" />
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                                    <Setter
+                                        Property="Padding"
+                                        Value="0" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid
+                                        HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="Auto"
+                                                SharedSizeGroup="gp1" />
+                                            <ColumnDefinition
+                                                Width="Auto"
+                                                SharedSizeGroup="gp2" />
+                                            <ColumnDefinition
+                                                Width="Auto"
+                                                SharedSizeGroup="gp3" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="Auto"
+                                                SharedSizeGroup="gp4" />
+                                            <ColumnDefinition
+                                                Width="Auto"
+                                                SharedSizeGroup="gp5" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                            Text="{Binding StartTime}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                            Text="—">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                            Text="{Binding EndTime}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="3"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                            Text="{Binding TypeName}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="4"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                            Text="{Binding TimeElapsed, Converter={StaticResource TimeSpanToStringConverter}}">
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Column="5"
+                                            VerticalAlignment="Center"
+                                            Margin="10"
+                                            Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                                            Visibility="{Binding TypeCountUp, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}"
+                                            Foreground="{Binding TimeDiff, Converter={StaticResource TimeSpanToBrushConverter}}"
+                                            Text="{Binding TimeDiff, Converter={StaticResource TimeSpanToStringConverter}, ConverterParameter=True}">
+                                        </TextBlock>
+                                        <materialDesign:PackIcon
+                                            Grid.Column="5"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"
+                                            Margin="10 0 10 0"
+                                            Visibility="{Binding Type.CountUp, Converter={StaticResource BoolToVisibilityConverter}}"
+                                            Kind="Stopwatch" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </materialDesign:ColorZone>
             </ScrollViewer>

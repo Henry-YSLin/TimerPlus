@@ -101,7 +101,7 @@ namespace TimerPlus
                 } while (SavedState.Data.SessionTypes.Select(x => x.Id).Contains(id));
                 if (checkCountUp.IsChecked.GetValueOrDefault())
                 {
-                    SavedState.Data.SessionTypes.Add(new SessionType(id, txtNewSessionName.Text, TimeSpan.FromSeconds(0), true));
+                    SavedState.Data.SessionTypes.Add(new SessionType(id, txtNewSessionName.Text, TimeSpan.Zero, true));
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace TimerPlus
                 EditSession.CountUp = checkCountUp.IsChecked.GetValueOrDefault();
                 if (EditSession.CountUp)
                 {
-                    EditSession.Time = TimeSpan.FromSeconds(0);
+                    EditSession.Time = TimeSpan.Zero;
                 }
                 else
                 {

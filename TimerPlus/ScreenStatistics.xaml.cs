@@ -25,6 +25,7 @@ namespace TimerPlus
         {
             InitializeComponent();
             Helper.HideBoundingBox(screen);
+            listSessionRecords.ItemsSource = SavedState.Data.SessionRecords;
             listSessionType.ItemsSource = SavedState.Data.SessionTypes;
             listDaySummaries.ItemsSource = SavedState.Data.DaySummaries;
             lblCurrentMonth.DataContext = SavedState.Data;
